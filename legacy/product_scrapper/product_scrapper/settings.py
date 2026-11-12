@@ -1,3 +1,4 @@
+import os
 BOT_NAME = 'product_scrapper'
 BOT_VERSION = '1.0'
 
@@ -14,7 +15,7 @@ DATABASE = {'drivername': 'postgres',
             'host': 'localhost',
             'port': '5432',
             'username': 'postgres', 
-            'password': 'fenderpass', 
+            'password': os.environ.get('DB_PASSWORD', ''), 
             'database': 'product'}
  
 

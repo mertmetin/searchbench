@@ -18,7 +18,7 @@ PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'iq=e-ym8h#x)%h)l7n7#*1r5%)l6z(6)qi8*bd&x^s)8x%)o1l'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'change-me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'product',
         'USER': 'postgres',                     
-        'PASSWORD': 'fenderpass',                  
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),                  
         'HOST': 'localhost',                      
         'PORT': '5432',     
     }
