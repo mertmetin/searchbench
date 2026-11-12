@@ -1,0 +1,4 @@
+# The 2014 code bundles Bootstrap, jQuery and Django admin assets; keep them out of
+# GitHub's language statistics so the repo is labelled by the code written here.
+legacy/** linguist-vendored
+app/static/*.html linguist-detectable=false
