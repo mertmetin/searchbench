@@ -27,7 +27,7 @@ def main(argv: list[str] | None = None) -> None:
     sub.add_parser("index", help="Build the BM25 and embedding indexes (cached)")
     e = sub.add_parser("eval", help="Score every retriever on the 480 labelled queries")
     e.add_argument("--only", help="comma-separated retriever keys")
-    sub.add_parser("report", help="Write results/summary.md and results/ndcg.png")
+    sub.add_parser("report", help="Write results/summary.md and results/exact_at_10.png")
     s = sub.add_parser("serve", help="Run the web app")
     s.add_argument("--port", type=int, default=8000)
     args = p.parse_args(argv)

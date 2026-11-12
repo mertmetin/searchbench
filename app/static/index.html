@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Search, 2014 vs 2026</title>
+<style>
+  :root {
+    --bg: #fcfcfb; --panel: #ffffff; --ink: #0b0b0b; --ink-2: #52514e; --muted: #8a8984;
+    --line: #e4e3df; --accent: #eb6834; --accent-ink: #ffffff; --old: #2a78d6;
+    --exact: #0ca30c; --partial: #c98500; --irrelevant: #d03b3b; --chip: #f0efec;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a19; --panel: #232322; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #8f8e88;
+      --line: #383835; --accent: #d95926; --old: #3987e5; --chip: #2d2d2b;
+      --exact: #33b833; --partial: #fab219; --irrelevant: #e66767;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  header { max-width: 1120px; margin: 0 auto; padding: 28px 16px 8px; }
+  h1 { font-size: 24px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { color: var(--ink-2); margin: 0 0 18px; max-width: 760px; }
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 16px; }
+  .tab { background: none; border: 0; padding: 10px 14px; color: var(--ink-2); font: inherit; cursor: pointer;
+         border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tab[aria-selected="true"] { color: var(--ink); border-color: var(--accent); font-weight: 600; }
+  main { max-width: 1120px; margin: 0 auto; padding: 0 16px 48px; }
+  form { display: flex; gap: 8px; flex-wrap: wrap; }
+  input[type=search] { flex: 1 1 280px; padding: 11px 14px; font: inherit; color: var(--ink); background: var(--panel);
+         border: 1px solid var(--line); border-radius: 8px; }
+  input[type=search]:focus, select:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  select { padding: 10px; font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  .go { padding: 10px 18px; font: inherit; font-weight: 600; color: var(--accent-ink); background: var(--accent);
+        border: 0; border-radius: 8px; cursor: pointer; }
+  .examples { margin: 12px 0 20px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
+  .chip { background: var(--chip); border: 1px solid var(--line); color: var(--ink-2); padding: 3px 10px; border-radius: 999px;
+          font: inherit; font-size: 13px; cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .layout { display: grid; grid-template-columns: 220px 1fr; gap: 24px; }
+  aside h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 4px 0 8px; }
+  .facets { display: flex; flex-direction: column; gap: 2px; margin-bottom: 18px; }
+  .facet { display: flex; justify-content: space-between; background: none; border: 0; text-align: left; padding: 5px 8px;
+           border-radius: 6px; font: inherit; font-size: 14px; color: var(--ink-2); cursor: pointer; }
+  .facet:hover { background: var(--chip); }
+  .facet[aria-pressed="true"] { background: var(--chip); color: var(--ink); font-weight: 600; }
+  .facet span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .results { display: flex; flex-direction: column; gap: 10px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .card h4 { margin: 0 0 2px; font-size: 15px; }
+  .meta { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+  .snippet { color: var(--ink-2); font-size: 13.5px; margin: 6px 0 0; }
+  .badge { font-size: 11.5px; font-weight: 600; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; }
+  .b-Exact { color: var(--exact); } .b-Partial { color: var(--partial); } .b-Irrelevant { color: var(--irrelevant); }
+  .b-Unlabelled { color: var(--muted); }
+  .rank { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 6px; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .col-head { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 10px;
+              padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+  .col-head.old { border-color: var(--old); } .col-head.new { border-color: var(--accent); }
+  .col-head h3 { margin: 0; font-size: 15px; }
+  .score { font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .note { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+  .empty { color: var(--muted); padding: 24px 0; }
+  .scoreboard { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); }
+  .stat b { display: block; font-size: 18px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  footer { max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; color: var(--muted); font-size: 13px; }
+  footer a { color: var(--ink-2); }
+  [hidden] { display: none !important; }
+  @media (max-width: 760px) {
+    .layout, .compare { grid-template-columns: 1fr; }
+    aside { order: 2; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Product search, 2014 vs 2026</h1>
+  <p class="sub">My 2014 product search used keyword matching on product titles. This rebuild adds semantic search, hybrid ranking and a reranker, and measures all of them on 480 real shopper queries labelled by people (Wayfair's WANDS dataset, 43k products).</p>
+  <p class="note" style="margin:0 0 6px">Search quality on 480 labelled queries (NDCG@10, higher is better)</p>
+  <div class="scoreboard" id="scoreboard" aria-label="NDCG@10 by approach"></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-search" aria-selected="true" aria-controls="view-search">Search</button>
+    <button class="tab" role="tab" id="tab-compare" aria-selected="false" aria-controls="view-compare">2014 vs 2026</button>
+  </div>
+</header>
+
+<main>
+  <form id="form" role="search">
+    <input type="search" id="q" placeholder="Try: comfy chair for a small apartment" aria-label="Search products" autocomplete="off">
+    <select id="mode" aria-label="Search approach"></select>
+    <button class="go" type="submit">Search</button>
+  </form>
+  <div class="examples" id="examples"></div>
+
+  <section id="view-search" role="tabpanel" aria-labelledby="tab-search">
+    <div class="layout">
+      <aside>
+        <h3>Product type</h3>
+        <div class="facets" id="facets"></div>
+        <h3>Rating</h3>
+        <div class="facets" id="ratings"></div>
+      </aside>
+      <div>
+        <p class="note" id="search-note" hidden></p>
+        <div class="results" id="results"><p class="empty">Search for anything you'd find in a home store.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-compare" role="tabpanel" aria-labelledby="tab-compare" hidden>
+    <p class="note">The same query through the 2014 approach and the best 2026 approach. For the 480 labelled queries (try the examples), each result shows the human judgement and each column its NDCG@10.</p>
+    <div class="compare">
+      <div><div class="col-head old"><h3>2014: keyword search on titles</h3><span class="score" id="old-score"></span></div><div class="results" id="old"></div></div>
+      <div><div class="col-head new"><h3>2026: hybrid search</h3><span class="score" id="new-score"></span></div><div class="results" id="new"></div></div>
+    </div>
+  </section>
+</main>
+<footer>Data: <a href="https://github.com/wayfair/WANDS">WANDS</a> (MIT). Code: <a href="https://github.com/mertmetin/productsearch">github.com/mertmetin/productsearch</a></footer>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { view: "search", productClass: null, minRating: 0 };
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function card(r, i) {
+  const rating = r.rating != null ? `★ ${r.rating} (${r.reviews})` : "No ratings";
+  const badge = r.label ? `<span class="badge b-${r.label}">${r.label}</span>` : "";
+  return `<article class="card"><h4><span class="rank">${i + 1}</span>${esc(r.name)}</h4>
+    <div class="meta"><span>${esc(r.product_class || r.category)}</span><span>${rating}</span>${badge}</div>
+    ${r.snippet ? `<p class="snippet">${esc(r.snippet)}…</p>` : ""}</article>`;
+}
+
+async function getJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function runSearch() {
+  const q = $("q").value.trim();
+  if (!q) return;
+  const params = new URLSearchParams({ q, mode: $("mode").value });
+  if (state.productClass) params.set("product_class", state.productClass);
+  if (state.minRating) params.set("min_rating", state.minRating);
+  $("results").innerHTML = `<p class="empty">Searching…</p>`;
+  try {
+    const data = await getJSON(`/api/search?${params}`);
+    $("results").innerHTML = data.results.length ? data.results.map(card).join("") : `<p class="empty">No results.</p>`;
+    $("facets").innerHTML = data.facets.map((f) =>
+      `<button class="facet" aria-pressed="${f.value === state.productClass}" data-class="${esc(f.value)}"><span>${esc(f.value)}</span><span>${f.count}</span></button>`).join("");
+    $("search-note").hidden = !data.labelled;
+    $("search-note").textContent = data.labelled ? "This is one of the 480 labelled WANDS queries: badges show how people judged each result." : "";
+  } catch (e) {
+    $("results").innerHTML = `<p class="empty">Something went wrong: ${esc(e.message)}</p>`;
+  }
+}
+
+async function runCompare() {
+  const q = $("q").value.trim();
+  if (!q) return;
+  $("old").innerHTML = $("new").innerHTML = `<p class="empty">Searching…</p>`;
+  const data = await getJSON(`/api/compare?${new URLSearchParams({ q })}`);
+  for (const [key, el, score] of [["title_bm25_2014", "old", "old-score"], ["hybrid", "new", "new-score"]]) {
+    $(el).innerHTML = data[key].results.map(card).join("") || `<p class="empty">No results.</p>`;
+    $(score).textContent = data[key]["ndcg@10"] != null ? `NDCG@10 ${data[key]["ndcg@10"].toFixed(2)}` : "";
+  }
+}
+
+const run = () => (state.view === "search" ? runSearch() : runCompare());
+
+$("form").addEventListener("submit", (e) => { e.preventDefault(); state.productClass = null; run(); });
+$("facets").addEventListener("click", (e) => {
+  const b = e.target.closest(".facet"); if (!b) return;
+  state.productClass = state.productClass === b.dataset.class ? null : b.dataset.class; runSearch();
+});
+$("ratings").innerHTML = [0, 3, 4, 4.5].map((r) =>
+  `<button class="facet" aria-pressed="${r === 0}" data-r="${r}"><span>${r ? `${r}★ and up` : "Any rating"}</span><span></span></button>`).join("");
+$("ratings").addEventListener("click", (e) => {
+  const b = e.target.closest(".facet"); if (!b) return;
+  state.minRating = Number(b.dataset.r);
+  for (const x of $("ratings").children) x.setAttribute("aria-pressed", x === b);
+  runSearch();
+});
+for (const [tab, view] of [["tab-search", "search"], ["tab-compare", "compare"]]) {
+  $(tab).addEventListener("click", () => {
+    state.view = view;
+    $("tab-search").setAttribute("aria-selected", view === "search");
+    $("tab-compare").setAttribute("aria-selected", view === "compare");
+    $("view-search").hidden = view !== "search";
+    $("view-compare").hidden = view !== "compare";
+    $("mode").hidden = view !== "search";
+    run();
+  });
+}
+
+getJSON("/api/meta").then((meta) => {
+  $("mode").innerHTML = Object.entries(meta.modes).map(([k, v]) =>
+    `<option value="${k}" ${k === "hybrid" ? "selected" : ""}>${esc(v)}</option>`).join("");
+  $("scoreboard").innerHTML = Object.entries(meta.ndcg).map(([k, v]) =>
+    `<div class="stat"><b>${v.toFixed(3)}</b>${esc(meta.modes[k] || k)}</div>`).join("");
+  const ex = ["comfy chair for a small apartment", ...meta.examples.slice(0, 6)];
+  $("examples").innerHTML = "Try: " + ex.map((q) => `<button class="chip" data-q="${esc(q)}">${esc(q)}</button>`).join("");
+});
+$("examples").addEventListener("click", (e) => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  $("q").value = b.dataset.q; state.productClass = null; run();
+});
+</script>
+</body>
+</html>
