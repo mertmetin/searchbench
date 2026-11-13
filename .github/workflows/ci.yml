@@ -15,6 +15,7 @@ jobs:
           python-version: "3.12"
       - name: Install (CPU-only PyTorch keeps the download small)
         run: |
+          uv venv
           uv pip install torch --index-url https://download.pytorch.org/whl/cpu
           uv pip install -e ".[dev]"
       - name: Lint
