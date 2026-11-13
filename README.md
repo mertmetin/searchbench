@@ -1,5 +1,7 @@
 # searchbench
 
+[![CI](https://github.com/mertmetin/searchbench/actions/workflows/ci.yml/badge.svg)](https://github.com/mertmetin/searchbench/actions/workflows/ci.yml)
+
 **Product search, 2014 vs 2026: keyword, semantic and hybrid retrieval, measured on 480 real shopper queries that people labelled.**
 
 In 2014 I built a price-comparison search engine for Canadian electronics stores. Scrapy crawled BestBuy.ca, Django stored the products in PostgreSQL, and Haystack indexed them in Elasticsearch, with a faceted Bootstrap front end. That code is preserved in [`legacy/`](legacy/).

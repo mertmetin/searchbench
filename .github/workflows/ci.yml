@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Install (CPU-only PyTorch keeps the download small)
+        run: |
+          uv pip install torch --index-url https://download.pytorch.org/whl/cpu
+          uv pip install -e ".[dev]"
+      - name: Lint
+        run: uv run --no-sync ruff check src tests
+      - name: Format
+        run: uv run --no-sync ruff format --check src tests
+      # The API tests need the WANDS data and skip themselves without it;
+      # metrics, fusion and BM25 tests run on small built-in fixtures.
+      - name: Test
+        run: uv run --no-sync pytest -q
