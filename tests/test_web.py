@@ -1,5 +1,5 @@
 """End-to-end API tests. They build the real indexes, so they need the WANDS
-data (`prodsearch download`) and take ~30 s on first run."""
+data (`searchbench download`) and take ~30 s on first run."""
 
 from pathlib import Path
 
@@ -10,7 +10,7 @@ if not Path("data/wands/product.csv").exists():
 
 from fastapi.testclient import TestClient  # noqa: E402
 
-from prodsearch.web import app  # noqa: E402
+from searchbench.web import app  # noqa: E402
 
 client = TestClient(app)
 

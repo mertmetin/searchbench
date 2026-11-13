@@ -34,7 +34,7 @@ def download(data_dir: Path = DATA_DIR) -> None:
 def _read(name: str, data_dir: Path) -> pd.DataFrame:
     path = data_dir / f"{name}.csv"
     if not path.exists():
-        raise FileNotFoundError(f"{path} not found; run `prodsearch download`")
+        raise FileNotFoundError(f"{path} not found; run `searchbench download`")
     return pd.read_csv(path, sep="\t")
 
 

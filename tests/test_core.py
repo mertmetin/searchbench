@@ -3,9 +3,9 @@ import math
 import pandas as pd
 import pytest
 
-from prodsearch.data import doc_text
-from prodsearch.evaluate import mrr_exact, ndcg_at_k, precision_exact_at_k
-from prodsearch.retrievers import FieldsBM25, TitleBM25, rrf
+from searchbench.data import doc_text
+from searchbench.evaluate import mrr_exact, ndcg_at_k, precision_exact_at_k
+from searchbench.retrievers import FieldsBM25, TitleBM25, rrf
 
 
 def _products():

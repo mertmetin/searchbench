@@ -1,5 +1,5 @@
 [project]
-name = "prodsearch"
+name = "searchbench"
 version = "2.0.0"
 description = "Product search, 2014 vs 2026: keyword, semantic and hybrid retrieval evaluated on 480 human-labelled queries (WANDS)."
 readme = "README.md"
@@ -21,14 +21,14 @@ dependencies = [
 dev = ["pytest>=8", "ruff>=0.6", "httpx>=0.27"]
 
 [project.scripts]
-prodsearch = "prodsearch.cli:main"
+searchbench = "searchbench.cli:main"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/prodsearch"]
+packages = ["src/searchbench"]
 
 [tool.ruff]
 line-length = 120

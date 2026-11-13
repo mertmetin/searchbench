@@ -1,4 +1,4 @@
-# WANDS data and built indexes: `prodsearch download && prodsearch index`
+# WANDS data and built indexes: `searchbench download && searchbench index`
 data/
 .cache/
 

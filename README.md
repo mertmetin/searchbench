@@ -1,4 +1,4 @@
-# productsearch
+# searchbench
 
 **Product search, 2014 vs 2026: keyword, semantic and hybrid retrieval, measured on 480 real shopper queries that people labelled.**
 
@@ -64,23 +64,23 @@ A FastAPI backend with a plain HTML/JS front end (no framework, light and dark m
 
 ```bash
 uv venv -p 3.12 && uv pip install -e ".[dev]"
-prodsearch download      # WANDS, ~96 MB
-prodsearch eval          # builds indexes (embedding takes a few minutes the first time), scores all approaches
-prodsearch report        # results/summary.md + chart
-prodsearch serve         # web app on http://127.0.0.1:8000
+searchbench download      # WANDS, ~96 MB
+searchbench eval          # builds indexes (embedding takes a few minutes the first time), scores all approaches
+searchbench report        # results/summary.md + chart
+searchbench serve         # web app on http://127.0.0.1:8000
 pytest                   # unit tests + API tests
 ```
 
 ## Layout
 
 ```
-src/prodsearch/
+src/searchbench/
   data.py         WANDS loader and graded labels
   retrievers.py   2014 title BM25, field BM25, dense, hybrid (RRF), reranker
   evaluate.py     NDCG@10, exact precision@10, MRR, unlabelled share
   web.py          FastAPI: /api/search, /api/compare, /api/meta
   report.py       results table and chart
-  cli.py          prodsearch download | eval | report | serve
+  cli.py          searchbench download | eval | report | serve
 app/static/       the web front end (one HTML file)
 legacy/           the 2014 Django + Haystack + Scrapy code
 results/          scores per approach and per query

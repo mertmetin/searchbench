@@ -1,4 +1,4 @@
-"""`prodsearch <command>`"""
+"""`searchbench <command>`"""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ def build_all(products):
 
 
 def main(argv: list[str] | None = None) -> None:
-    p = argparse.ArgumentParser(prog="prodsearch")
+    p = argparse.ArgumentParser(prog="searchbench")
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("download", help="Fetch WANDS (~96 MB)")
     sub.add_parser("index", help="Build the BM25 and embedding indexes (cached)")
@@ -63,7 +63,7 @@ def main(argv: list[str] | None = None) -> None:
     elif args.cmd == "serve":
         import uvicorn
 
-        uvicorn.run("prodsearch.web:app", host="127.0.0.1", port=args.port)
+        uvicorn.run("searchbench.web:app", host="127.0.0.1", port=args.port)
 
 
 if __name__ == "__main__":
